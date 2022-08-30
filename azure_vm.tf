@@ -25,8 +25,8 @@ resource "azurerm_virtual_network" "tfexample" {
 # Create a Subnet in the Virtual Network
 resource "azurerm_subnet" "tfexample" {
   name                 = "example-subnet"
-  resource_group_name  = azurerm_resource_group.example.name
-  virtual_network_name = azurerm_virtual_network.example.name
+  resource_group_name  = azurerm_resource_group.tfexample.name
+  virtual_network_name = azurerm_virtual_network.tfexample.name
   address_prefixes     = ["10.0.1.0/24"]
 }
 
