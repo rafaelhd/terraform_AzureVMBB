@@ -22,46 +22,37 @@ resource "azurerm_network_security_group" "tfexample" {
 
 resource "azurerm_virtual_network" "tfexample" {
   name                = "example-network"
+  address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.tfexample.location
   resource_group_name = azurerm_resource_group.tfexample.name
-  address_space       = ["10.0.0.0/16"]
-  dns_servers         = ["10.0.0.4", "10.0.0.5"]
+}
 
-  subnet {
-    name           = "subnet1"
-    address_prefix = "10.0.1.0/24"
-  }
-
-  subnet {
-    name           = "subnet2"
-    address_prefix = "10.0.2.0/24"
-    security_group = azurerm_network_security_group.tfexample.id
-  }
-
-  tags = {
-    environment = "Dev"
-  }
+resource "azurerm_subnet" "example" {
+  name                 = "internal"
+  resource_group_name  = azurerm_resource_group.tfexample.name
+  virtual_network_name = azurerm_virtual_network.tfexample.name
+  address_prefixes     = ["10.0.2.0/24"]
 }
 
 # Create a Network Interface
-#resource "azurerm_network_interface" "tfexample" {
-#  name                = "my-terraform-nic"
-#  location            = azurerm_resource_group.tfexample.location
-#  resource_group_name = azurerm_resource_group.tfexample.name
+resource "azurerm_network_interface" "tfexample" {
+  name                = "my-terraform-nic"
+  location            = azurerm_resource_group.tfexample.location
+  resource_group_name = azurerm_resource_group.tfexample.name
 
-#  ip_configuration {
-#    name                          = "my-terraform-nic-ip-config"
-#    subnet_id                     = azurerm_subnet.tfexample.id
-#    private_ip_address_allocation = "Dynamic"
-#  }
-#}
+  ip_configuration {
+    name                          = "my-terraform-nic-ip-config"
+    subnet_id                     = azurerm_subnet.tfexample.id
+    private_ip_address_allocation = "Dynamic"
+  }
+}
 
 # Create a Virtual Machine
 resource "azurerm_linux_virtual_machine" "tfexample" {
   name                            = "my-terraform-vm"
   location                        = azurerm_resource_group.tfexample.location
   resource_group_name             = azurerm_resource_group.tfexample.name
-#  network_interface_ids           = [azurerm_network_interface.tfexample.id]
+  network_interface_ids           = [azurerm_network_interface.tfexample.id]
   size                            = "Standard_DS1_v2"
   computer_name                   = "myvm"
   admin_username                  = "azureuser"
