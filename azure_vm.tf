@@ -2,10 +2,10 @@
   provider "azurerm" {
     features{
     }
-    client_id = var.client_id
+    client_id = var.az_client_id
     client_secret = var.client_secret
-    subscription_id = var.subscription_id
-    tenant_id = var.tenant_id
+    subscription_id = var.az_sub_id
+    tenant_id = var.az_tenant_id
 }
 
 # Create a Resource Group if it doesn’t exist
