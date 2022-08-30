@@ -1,5 +1,5 @@
 
-variable "client_id" {
+variable "az_client_id" {
     type = string
     description = "required SP client id"
 }
@@ -9,12 +9,12 @@ variable "client_secret" {
     description = "required SP client secret id"
 }
 
-variable "subscription_id" {
+variable "az_sub_id" {
     type = string
     description = "required SP sub id"
 }
 
-variable "tenant_id" {
+variable "az_tenant_id" {
     type = string
     description = "required SP tenant id"
 }
