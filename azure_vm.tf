@@ -1,9 +1,9 @@
 # Configure the Microsoft Azure provider
   provider "azurerm" {
-  client_id = "${az_client_id}"
-  client_secret = "${az_key}"
-  subscription_id = "${az_sub_id}"
-  tenant_id = "${az_tenant_id}"
+  client_id = ${az_client_id}
+  client_secret = ${az_key}
+  subscription_id = ${az_sub_id}
+  tenant_id = ${az_tenant_id}
 }
 
 # Create a Resource Group if it doesn’t exist
