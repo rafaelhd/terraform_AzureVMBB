@@ -1,6 +1,9 @@
 # Configure the Microsoft Azure provider
-provider "azurerm" {
-  features {}
+  provider "azurerm" {
+  client_id = ""
+  client_secret = ""
+  subscription_id = ""
+  tenant_id = ""
 }
 
 # Create a Resource Group if it doesn’t exist
