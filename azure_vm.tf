@@ -1,15 +1,23 @@
-# Configure the Microsoft Azure provider
+terraform {
+    required_providers {
+      azurerm = {
+      source = "hashicorp/azurerm"
+      #version = ">= 2.0.0, < 2.60.0"
+    }
+  }
+}
 provider "azurerm" {
     client_id       = var.az_client_id
     client_secret   = var.client_secret
     subscription_id = var.az_sub_id
     tenant_id       = var.az_tenant_id
-  features {}
+features {}
+
 }
 
 resource "azurerm_resource_group" "example" {
   name     = "example-resources"
-  location = "us-east"
+  location = "eastus"
 }
 
 resource "azurerm_virtual_network" "example" {
