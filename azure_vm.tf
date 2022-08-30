@@ -7,68 +7,61 @@ provider "azurerm" {
   features {}
 }
 
-# Create a Resource Group if it doesn’t exist
-resource "azurerm_resource_group" "tfexample" {
-  name     = "my-terraform-rg"
-  location = "westus"
+resource "azurerm_resource_group" "example" {
+  name     = "example-resources"
+  location = "us-east"
 }
 
-# Create a Virtual Network
-resource "azurerm_network_security_group" "tfexample" {
-  name                = "example-security-group"
-  location            = azurerm_resource_group.tfexample.location
-  resource_group_name = azurerm_resource_group.tfexample.name
-}
-
-resource "azurerm_virtual_network" "tfexample" {
+resource "azurerm_virtual_network" "example" {
   name                = "example-network"
   address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.tfexample.location
-  resource_group_name = azurerm_resource_group.tfexample.name
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
 }
 
-resource "azurerm_subnet" "tfexample" {
+resource "azurerm_subnet" "example" {
   name                 = "internal"
-  resource_group_name  = azurerm_resource_group.tfexample.name
-  virtual_network_name = azurerm_virtual_network.tfexample.name
+  resource_group_name  = azurerm_resource_group.example.name
+  virtual_network_name = azurerm_virtual_network.example.name
   address_prefixes     = ["10.0.2.0/24"]
 }
 
-# Create a Network Interface
-resource "azurerm_network_interface" "tfexample" {
-  name                = "my-terraform-nic"
-  location            = azurerm_resource_group.tfexample.location
-  resource_group_name = azurerm_resource_group.tfexample.name
+resource "azurerm_network_interface" "example" {
+  name                = "example-nic"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
 
   ip_configuration {
-    name                          = "my-terraform-nic-ip-config"
-    subnet_id                     = azurerm_subnet.tfexample.id
+    name                          = "internal"
+    subnet_id                     = azurerm_subnet.example.id
     private_ip_address_allocation = "Dynamic"
   }
 }
 
-# Create a Virtual Machine
-resource "azurerm_linux_virtual_machine" "tfexample" {
-  name                            = "my-terraform-vm"
-  location                        = azurerm_resource_group.tfexample.location
-  resource_group_name             = azurerm_resource_group.tfexample.name
-  network_interface_ids           = [azurerm_network_interface.tfexample.id]
-  size                            = "Standard_DS1_v2"
-  computer_name                   = "myvm"
-  admin_username                  = "azureuser"
-  admin_password                  = "Password1234!"
-  disable_password_authentication = false
+resource "azurerm_linux_virtual_machine" "example" {
+  name                = "example-machine"
+  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.example.location
+  size                = "Standard_F2"
+  admin_username      = "adminuser"
+  network_interface_ids = [
+    azurerm_network_interface.example.id,
+  ]
+
+  admin_ssh_key {
+    username   = "adminuser"
+    public_key = file("~/.ssh/id_rsa.pub")
+  }
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
 
   source_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
+    sku       = "16.04-LTS"
     version   = "latest"
-  }
-
-  os_disk {
-    name                 = "my-terraform-os-disk"
-    storage_account_type = "Standard_LRS"
-    caching              = "ReadWrite"
   }
 }
