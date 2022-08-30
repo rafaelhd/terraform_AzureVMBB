@@ -1,3 +1,4 @@
+
 variable "client_id" {
     type = string
     description = "required SP client id"
