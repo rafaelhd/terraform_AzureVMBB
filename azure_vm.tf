@@ -1,20 +1,10 @@
-#Configure provider
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "=3.0.0"
-    }
-  }
-}
-
 # Configure the Microsoft Azure Provider
 provider "azurerm" {
   features {
-    client_id = ${var.az_client_id}
-    client_secret = ${var.az_key}
-    subscription_id = ${var.az_sub_id}
-    tenant_id = ${var.az_tenant_id}
+    client_id = var.az_client_id
+    client_secret = var.az_key
+    subscription_id = var.az_sub_id
+    tenant_id = var.az_tenant_id
   }
 }
 
