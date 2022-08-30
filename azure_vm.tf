@@ -27,7 +27,7 @@ resource "azurerm_virtual_network" "tfexample" {
   resource_group_name = azurerm_resource_group.tfexample.name
 }
 
-resource "azurerm_subnet" "example" {
+resource "azurerm_subnet" "tfexample" {
   name                 = "internal"
   resource_group_name  = azurerm_resource_group.tfexample.name
   virtual_network_name = azurerm_virtual_network.tfexample.name
