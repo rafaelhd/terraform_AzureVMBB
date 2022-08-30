@@ -27,7 +27,7 @@ resource "azurerm_subnet" "tfexample" {
   name                 = "my-terraform-subnet"
   resource_group_name  = azurerm_resource_group.tfexample.name
   virtual_network_name = azurerm_virtual_network.tfexample.name
-  address_prefixes     = ["10.0.2.0/24"]
+  address_prefix     = ["10.0.2.0/24"]
 }
 
 # Create a Network Interface
