@@ -4,7 +4,6 @@ provider "azurerm" {
     client_secret   = var.client_secret
     subscription_id = var.az_sub_id
     tenant_id       = var.az_tenant_id
-    version         = "=2.0.0" #Can be overide as you wish
   features {}
 }
 
@@ -15,19 +14,33 @@ resource "azurerm_resource_group" "tfexample" {
 }
 
 # Create a Virtual Network
+resource "azurerm_network_security_group" "tfexample" {
+  name                = "example-security-group"
+  location            = azurerm_resource_group.tfexample.location
+  resource_group_name = azurerm_resource_group.tfexample.name
+}
+
 resource "azurerm_virtual_network" "tfexample" {
-  name                = "my-terraform-vnet"
+  name                = "example-network"
   location            = azurerm_resource_group.tfexample.location
   resource_group_name = azurerm_resource_group.tfexample.name
   address_space       = ["10.0.0.0/16"]
-}
+  dns_servers         = ["10.0.0.4", "10.0.0.5"]
 
-# Create a Subnet in the Virtual Network
-resource "azurerm_subnet" "tfexample" {
-  name                 = "example-subnet"
-  resource_group_name  = azurerm_resource_group.tfexample.name
-  virtual_network_name = azurerm_virtual_network.tfexample.name
-  address_prefixes     = ["10.0.1.0/24"]
+  subnet {
+    name           = "subnet1"
+    address_prefix = "10.0.1.0/24"
+  }
+
+  subnet {
+    name           = "subnet2"
+    address_prefix = "10.0.2.0/24"
+    security_group = azurerm_network_security_group.tfexample.id
+  }
+
+  tags = {
+    environment = "Dev"
+  }
 }
 
 # Create a Network Interface
