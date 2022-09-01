@@ -22,3 +22,9 @@ variable "az_tenant_id" {
     description = "required SP tenant id"
     default = null
 }
+
+variable "az_tenant_id2" {
+    type = string
+    description = "required SP tenant id"
+    default = null
+}
